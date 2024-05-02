@@ -12,12 +12,10 @@ RUN apt-get update \
 
 RUN git clone --depth 1 --branch v2.20.0 https://github.com/osmcode/libosmium.git
 WORKDIR /libosmium/build
-RUN cmake -DCMAKE_BUILD_TYPE=RelWithDebInfo -INSTALL_GDALCPP=on -WITH_PROJ=on .. && make && make install
+RUN cmake -DCMAKE_BUILD_TYPE=RelWithDebInfo .. && make && make install
 
 RUN git clone --depth 1 --branch v1.16.0 https://github.com/osmcode/osmium-tool.git /osmium-tool
 WORKDIR /osmium-tool/build
 RUN cmake -DCMAKE_BUILD_TYPE=RelWithDebInfo .. && make && make install
 
-FROM scratch
-
-COPY --from=osmium_builder /usr/local/bin/osmium /usr/local/bin/
+CMD ["/usr/local/bin/osmium"]
